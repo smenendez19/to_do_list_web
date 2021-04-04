@@ -1,0 +1,37 @@
+{% extends "to_do_list/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Inicio de sesion{% endblock %}
+
+{% block content %}
+<br/><br/><br/><br/><br/>
+<h1>Inicio de sesion</h1>
+{% if error_login %}
+<div class="text-logout"><b>ERROR:</b> El usuario o contraseña no existen o fueron mal colocados</div>
+{% endif %}
+<div class="container-xl form-tarea-create">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6 w-100">
+                {{ form.username|as_crispy_field }}
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-6 w-100">
+                {{ form.password|as_crispy_field }}
+            </div>
+        </div>
+        <br/>
+        <div class="row button-save-tarea">
+            <div class="col-6 w-100">
+                <button type="submit" name="submit" value="">Iniciar Sesion</button>
+                <a href="{% url 'accounts_signup' %}"><i class="fas fa-user-plus"></i>Registrarse</a>
+            </div>
+        </div>
+        <br/>
+    </form>
+</div>
+
+{% endblock content %}

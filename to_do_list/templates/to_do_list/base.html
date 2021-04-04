@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <meta charset="UTF-8" />
+    <title>{% block title %} {% endblock %} | To-Do-List</title>
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'to_do_list/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-5.15.3-web/css/all.css' %}">
+    <meta http-equiv="refresh" content="360" />
+</head>
+
+<body class="bg-info">
+    {% if request.user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">To-Do-List</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i><b>Lista de
+                                Tareas</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tarea_create' %}"><i class="fas fa-tasks"></i><b>Crear nueva
+                                tarea</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts_logout' %}"><i
+                                class="fas fa-sign-out-alt"></i><b>Cerrar Sesion</b></a>
+                    </li>
+                </ul>
+                <span class="nav-link disabled"><b><span id="actual_date"></span></b></span>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    <script src="{% static 'bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js' %}"></script>
+    <script>
+        window.onload = function () {
+            var actual_date = new Date();
+            document.getElementById('actual_date').innerHTML = "Hoy es " + actual_date.getUTCDate() + "/" + actual_date.getUTCMonth() + "/" + actual_date.getUTCFullYear();
+        }
+    </script>
+    {% block content %} {% endblock %}
+</body>
+
+<footer>
+    <br/><br/><br/>
+    <div class="foot-page">
+        Pagina creada por Santiago Menendez
+        <br/>
+        Esta pagina fue hecha como proyecto de aprendizaje de Django
+        <br/>
+        Si quiere consultar o tiene algun problema contacteme a <b>santiagomenendez@outlook.com</b>
+    </div>
+</footer>
+
+</html>

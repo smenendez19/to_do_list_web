@@ -1,0 +1,20 @@
+# Text backup files
+*.bak
+
+#Database
+*.sqlite3
+
+# Secret Key
+secret_key.txt
+
+# Pass Admin
+pass_admin.txt
+
+# Tutoriales
+tutoriales_docs.txt
+
+# Bootstrap
+to_do_list/static/bootstrap-5.0.0-beta3-dist/*
+
+# Font Awesome
+to_do_list/static/fontawesome-free-5.15.3-web/*

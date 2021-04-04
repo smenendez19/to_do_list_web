@@ -1,0 +1,36 @@
+{% extends "to_do_list/base.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+<br/><br/><br/><br/><br/>
+<h1>Ha cerrado sesion correctamente</h1>
+<h1>Redirigiendo al login en <span id="number">5</span> segundos</h1>
+
+<script>
+    function redirect()
+    {
+       window.location.href = "{% url 'home' %}";
+    }
+    var num = document.getElementById('number')
+    var i = 5;
+    function start() {
+        setInterval(decrease, 1000);
+    }
+    function decrease() 
+    {
+        if (i > 0)
+        {
+            i--;
+            num.innerText = i;
+        }
+    }
+    start();
+    setTimeout(redirect, 5000);
+</script>
+
+<div class="text-logout">
+    <p>En caso de que no lo redirija automaticamente ingrese al siguiente link: &nbsp; <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a></p>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,42 @@
+{% extends 'to_do_list/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Creacion de Tarea{% endblock %}
+
+{% block content %}
+<br/><br/><br/>
+<h1>Creando tarea</h1>
+<div class="container form-tarea-create">
+    <form action="" method="POST"> {% csrf_token %}
+        <div class="row">
+            <div class="col-6 w-100">
+                {{ form_create.nombre|as_crispy_field }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 w-100">
+                {{ form_create.descripcion|as_crispy_field }}
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-6 w-100">
+                {{ form_create.estado|as_crispy_field }}
+            </div>
+        </div>
+        <br/>
+        <div class="row button-save-tarea">
+            <div class="col-6 w-100">
+                <button type="submit" name="save_tarea" value="">Guardar Tarea</button>
+                <button type="submit" name="save_and_create_another" value="">Guardar y Crear otra Tarea</button>
+            </div>
+        </div>
+    </form>
+    <br/><br/>
+    <div class="row">
+        <div class="col-6">
+            <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i><b>Volver a la lista de tareas</b></a>
+        </div>
+    </div>
+</div>
+{% endblock %}

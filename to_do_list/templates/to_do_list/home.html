@@ -1,0 +1,62 @@
+{% extends 'to_do_list/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Bienvenido {{ request.user.username }}</h1>
+<h2>Tareas</h2>
+
+<form class="filtro-tareas" name="filtro-tareas" method="GET" action="">
+    Filtro:
+    <select name="filter">
+      <option value="all" {% if filter == 'all' %}selected{% endif %}>Todos</option>
+      <option value="true" {% if filter == 'true' %}selected{% endif %} >Completados</option>
+      <option value="false" {% if filter == 'false' %}selected{% endif %}>No completados</option>
+    </select>
+    Ordenar:
+    <select name="order">
+        <option value="ascended" {% if order == 'ascended' %}selected{% endif %}>Ascendente</option>
+        <option value="descended" {% if order == 'descended' %}selected{% endif %}>Descendente</option>
+      </select>
+    <input type="submit" value="Aplicar">
+</form>
+
+<form name="lista-tareas" action="" method="POST"> {% csrf_token %}
+    <div class="container-xxl">
+        <div class="row">
+            {% for tarea in list_tareas %}
+            <div class="col-lg-4 p-1">
+                <div class="{% if tarea.estado %}bg-success tarea-completed{% else %}bg-danger tarea-incompleted{% endif %} border border-dark rounded border-5">
+                    <button type="submit" class="button-status-tarea" style="background-color:{% if tarea.estado %}green{% else %}red{% endif %};" name="change_estado_tarea" value="{{tarea.id}}">{% if tarea.estado %}<i class="fas fa-check-circle"></i>{% else %}<i class="fas fa-times-circle"></i>{% endif %}</button>
+                    <button class="button-edit-tarea" type="submit" name="edit_tarea" value="{{tarea.id}}"><i class="far fa-edit"></i></button>
+                    <button class="button-delete-tarea" type="submit" name="delete_tarea" value="{{tarea.id}}"><i class="fas fa-trash-alt"></i></button><br/><br/>
+                    <div class="text-name-tarea">{{tarea.nombre}}</div><br/>
+                    <div class="text-description-tarea">{% if tarea.descripcion == None %}{% else %}{{tarea.descripcion}}{% endif %}</div>
+                    <div class="text-date-created-tarea"><b>Creado:</b> {{tarea.created|date:"d/m/Y H:i:s"}}</div>
+                    <div class="text-date-updated-tarea"><b>Actualizado:</b> {{tarea.updated|date:"d/m/Y H:i:s"}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if list_tareas.has_previous %}
+            <a href="?page=1"><i class="fas fa-fast-backward"></i></a>
+            <a href="?page={{ list_tareas.previous_page_number }}"><i class="fas fa-step-backward"></i></a>
+            {% endif %}
+
+            <span class="current">
+                Pagina {{ list_tareas.number }} de {{ list_tareas.paginator.num_pages }}
+            </span>
+
+            {% if list_tareas.has_next %}
+            <a href="?page={{ list_tareas.next_page_number }}"><i class="fas fa-step-forward"></i></a>
+            <a href="?page={{ list_tareas.paginator.num_pages }}"><i class="fas fa-fast-forward"></i></a>
+            {% endif %}
+        </span>
+    </div>
+</form>
+
+{% endblock %}

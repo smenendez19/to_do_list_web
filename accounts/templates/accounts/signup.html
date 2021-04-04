@@ -1,0 +1,27 @@
+{% extends "to_do_list/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<br/><br/>
+<h1>Formulario de registro</h1>
+{% if form.non_field_errors %}
+    <ul class='form-errors'>
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<div class="container-xl form-tarea-create">
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form|crispy }}
+        <div class="row button-save-tarea">
+            <div class="col-6 w-100">
+                <button type="submit" name="submit" value="">Registrarse</button>
+                <a href="{% url 'accounts_login' %}"><i class="fas fa-sign-in-alt"></i>Volver al login</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
