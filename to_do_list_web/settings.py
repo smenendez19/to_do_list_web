@@ -30,7 +30,7 @@ SECRET_KEY = '0ksz0f50ur1oh_2$7ha#lpt!z845#u_va#p+gf_k7!t(%z*1h^'
 DEBUG = True
 #DEBUG = bool( os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -128,6 +128,8 @@ USE_TZ = True
 # Media y Static
 
 STATIC_URL = '/static/'
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'to_do_list_web/static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

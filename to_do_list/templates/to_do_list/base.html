@@ -7,9 +7,9 @@
     <meta charset="UTF-8" />
     <title>{% block title %} {% endblock %} | To-Do-List</title>
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'to_do_list/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'fontawesome-free-5.15.3-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
     <meta http-equiv="refresh" content="360" />
 </head>
 
@@ -43,14 +43,16 @@
         </div>
     </nav>
     {% endif %}
-    <script src="{% static 'bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script>
         window.onload = function () {
             var actual_date = new Date();
-            document.getElementById('actual_date').innerHTML = "Hoy es " + actual_date.getUTCDate() + "/" + actual_date.getUTCMonth() + "/" + actual_date.getUTCFullYear();
+            document.getElementById('actual_date').innerHTML = "Hoy es " + actual_date.getUTCDate() + "/" + (actual_date.getUTCMonth() + 1) + "/" + actual_date.getUTCFullYear();
         }
     </script>
     {% block content %} {% endblock %}
+    {% block javascript %} {% endblock %}
 </body>
 
 <footer>

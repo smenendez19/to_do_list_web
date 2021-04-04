@@ -7,6 +7,13 @@
 <h1>Ha cerrado sesion correctamente</h1>
 <h1>Redirigiendo al login en <span id="number">5</span> segundos</h1>
 
+<div class="text-logout">
+    <p>En caso de que no lo redirija automaticamente ingrese al siguiente link: &nbsp; <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a></p>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
 <script>
     function redirect()
     {
@@ -28,9 +35,4 @@
     start();
     setTimeout(redirect, 5000);
 </script>
-
-<div class="text-logout">
-    <p>En caso de que no lo redirija automaticamente ingrese al siguiente link: &nbsp; <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a></p>
-</div>
-
-{% endblock content %}
+{% endblock %}

@@ -14,7 +14,7 @@ pass_admin.txt
 tutoriales_docs.txt
 
 # Bootstrap
-to_do_list/static/bootstrap-5.0.0-beta3-dist/*
+to_do_list/static/bootstrap*/*
 
 # Font Awesome
-to_do_list/static/fontawesome-free-5.15.3-web/*
+to_do_list/static/fontawesome*/*

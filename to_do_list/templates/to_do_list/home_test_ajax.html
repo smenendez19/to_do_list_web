@@ -21,6 +21,13 @@
     <input type="submit" value="Aplicar">
 </form>
 
+<button id="button-test">TEST</button>
+<br/><br/>
+<div class="container-xxl">
+    <div id="div-test" class="row">
+    </div>
+</div>
+
 <form name="lista-tareas" action="" method="POST"> {% csrf_token %}
     <div class="container-xxl">
         <div class="row">
@@ -58,5 +65,50 @@
         </span>
     </div>
 </form>
+
+<script>
+    $(document).ready(
+        function() {
+            $('#button-test').click(
+                function(){
+                    let filter = document.getElementById('filter-task').value;
+                    let order = document.getElementById('order-task').value;
+                    console.log(filter)
+                    $.ajax(
+                    {
+                        type:"GET",
+                        url: "{% url 'filter_and_order_tasks' %}",
+                        data:{
+                                'filter': filter,
+                                'order' : order
+                        },
+                        success: function(response)
+                        {
+                            //console.log(response);
+                            document.getElementById('div-test').innerHTML = '';
+                            for (let index = 0; index < response.length; index++) {
+                                var tarea = response[index].fields;
+                                //var tarea_id = repsonse[index].id;
+                                var status = JSON.stringify(tarea.estado);
+                                if (status == "false") {
+                                    var class_box = '<div class="bg-danger tarea-incompleted border border-dark rounded border-5">';
+                                }
+                                else {
+                                    var class_box = '<div class="bg-success tarea-completed border border-dark rounded border-5">';
+                                }
+                                document.getElementById('div-test').innerHTML += '<div class="col-lg-4 p-1">';
+                                document.getElementById('div-test').innerHTML += class_box;
+                                document.getElementById('div-test').innerHTML += '<div class="text-name-tarea">' + tarea.nombre + '</div><br/>';
+                                document.getElementById('div-test').innerHTML += '<div class="text-description-tarea">' + tarea.descripcion + '</div>';
+                                document.getElementById('div-test').innerHTML += '</div>';
+                                document.getElementById('div-test').innerHTML += ''
+                                document.getElementById('div-test').innerHTML += '</div>';
+                            }
+                        }
+                    })
+            });
+        }
+    );
+</script>
 
 {% endblock %}

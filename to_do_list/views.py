@@ -1,8 +1,37 @@
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Tarea
 from .forms import TareaCreateForm
 from django.core.paginator import Paginator
+import json
+from django.core import serializers
+from django.template import loader
+
+# Filtrado y Ordenado de la lista de tareas (GET)
+def filter_and_order_tasks(request):
+    tareas_status = ""
+    tareas_order = ""
+    if request.is_ajax and request.method == "GET":
+        # Filtrado de tareas
+        if 'filter' in request.GET:
+            tareas_status = request.GET.get('filter')
+            if tareas_status == 'all':
+                list_tareas = Tarea.objects.filter(usuario=request.user.id)
+            elif tareas_status == 'true':
+                list_tareas = Tarea.objects.filter(usuario=request.user.id, estado=True)
+            elif tareas_status == 'false':
+                list_tareas = Tarea.objects.filter(usuario=request.user.id, estado=False)
+        else:
+            list_tareas = Tarea.objects.filter(usuario=request.user.id)
+        # Ordenamiento por fecha
+        if 'order' in request.GET:
+            tareas_order= request.GET.get('order')
+            if tareas_order == 'ascended':
+                list_tareas = list_tareas.order_by('created')
+            elif tareas_order == 'descended':
+                list_tareas = list_tareas.order_by('-created')
+        list_tareas = serializers.serialize("python", list_tareas)
+        return JsonResponse(list_tareas, status=200, safe=False)
 
 # Pagina de Inicio
 
