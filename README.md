@@ -17,8 +17,9 @@ Se utilizaron los siguientes frameworks y lenguajes para el proyecto:
 
 Los modulos de Python necesarios para instalar la web son los siguientes:
 
-- pip install django
-- pip install django-crispy-forms
+- django
+- django-crispy-forms
+- djangorestframework
 
 Los frameworks css utilizados en la web son los siguientes:
 

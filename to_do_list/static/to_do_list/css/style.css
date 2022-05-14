@@ -141,3 +141,7 @@ a {
     margin: auto;
     text-align: center;
 }
+
+.hide { 
+    display:none 
+}

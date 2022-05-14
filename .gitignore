@@ -1,20 +1,15 @@
 # Text backup files
 *.bak
-
 #Database
 *.sqlite3
-
-# Secret Key
-secret_key.txt
-
-# Pass Admin
-pass_admin.txt
-
-# Tutoriales
-tutoriales_docs.txt
-
 # Bootstrap
 to_do_list/static/bootstrap*/*
-
 # Font Awesome
 to_do_list/static/fontawesome*/*
+# pycache
+__pycache__
+*.pyc
+# venv
+django-venv
+# Env vars
+env_vars.json

@@ -1,0 +1,125 @@
+{% extends 'to_do_list/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Bienvenido {{ request.user.username }}</h1>
+<h2>Tareas</h2>
+
+<div class="filtro-tareas">
+    <b>Filtro:</b>
+    <select name="filter" id="filter-task">
+      <option value="all" {% if filter == 'all' %}selected{% endif %}>Todos</option>
+      <option value="true" {% if filter == 'true' %}selected{% endif %} >Completados</option>
+      <option value="false" {% if filter == 'false' %}selected{% endif %}>No completados</option>
+    </select>
+    <b>Ordenar:</b>
+    <select name="order" id="order-task">
+        <option value="ascended" {% if order == 'ascended' %}selected{% endif %}>Ascendente</option>
+        <option value="descended" {% if order == 'descended' %}selected{% endif %}>Descendente</option>
+      </select>
+    <button id="button-aplicar" type="submit" value="">Aplicar</button>
+    <div id="loader" class="spinner-border text-dark" style="display:none;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<form name="lista-tareas" action="" method="POST"> {% csrf_token %}
+    <div class="container-xxl">
+        <div id="div-tareas" class="row">
+            {% for tarea in list_tareas %}
+            <div class="col-lg-4 p-1">
+                <div class="{% if tarea.estado %}bg-success tarea-completed{% else %}bg-danger tarea-incompleted{% endif %} border border-dark rounded border-5">
+                    <button type="submit" class="button-status-tarea" style="background-color:{% if tarea.estado %}green{% else %}red{% endif %};" name="change_estado_tarea" value="{{tarea.id}}">{% if tarea.estado %}<i class="fas fa-check-circle"></i>{% else %}<i class="fas fa-times-circle"></i>{% endif %}</button>
+                    <button class="button-edit-tarea" type="submit" name="edit_tarea" value="{{tarea.id}}"><i class="far fa-edit"></i></button>
+                    <button class="button-delete-tarea" type="submit" name="delete_tarea" value="{{tarea.id}}"><i class="fas fa-trash-alt"></i></button><br/><br/>
+                    <div class="text-name-tarea">{{tarea.nombre}}</div><br/>
+                    <div class="text-description-tarea">{% if tarea.descripcion == None %}{% else %}{{tarea.descripcion}}{% endif %}</div>
+                    <div class="text-date-created-tarea"><b>Creado:</b> {{tarea.created|date:"d/m/Y H:i:s"}}</div>
+                    <div class="text-date-updated-tarea"><b>Actualizado:</b> {{tarea.updated|date:"d/m/Y H:i:s"}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if list_tareas.has_previous %}
+            <a href="?page=1"><i class="fas fa-fast-backward"></i></a>
+            <a href="?page={{ list_tareas.previous_page_number }}"><i class="fas fa-step-backward"></i></a>
+            {% endif %}
+
+            <span class="current">
+                Pagina {{ list_tareas.number }} de {{ list_tareas.paginator.num_pages }}
+            </span>
+
+            {% if list_tareas.has_next %}
+            <a href="?page={{ list_tareas.next_page_number }}"><i class="fas fa-step-forward"></i></a>
+            <a href="?page={{ list_tareas.paginator.num_pages }}"><i class="fas fa-fast-forward"></i></a>
+            {% endif %}
+        </span>
+    </div>
+</form>
+
+<script>
+    $(document).ready(
+        function() {
+            $('#button-aplicar').click(
+                function(){
+                    let filter = document.getElementById('filter-task').value;
+                    let order = document.getElementById('order-task').value;
+                    $.ajax(
+                    {
+                        type:"GET",
+                        url: "{% url 'filter_and_order_tasks' %}",
+                        data:{
+                                'filter': filter,
+                                'order' : order
+                        },
+                        beforeSend: function() {
+                            $('#loader').show();
+                        },
+                        success: function(response)
+                        {
+                            var div_tareas = "div-tareas"
+                            document.getElementById(div_tareas).innerHTML = '';
+                            for (let index = 0; index < response.length; index++) {
+                                var tarea = response[index];
+                                var tarea_id = response[index].id;
+                                var status = JSON.stringify(tarea.estado);
+                                var button_edit_tarea = '<button class="button-edit-tarea" type="submit" name="edit_tarea" value="' + tarea_id + '"><i class="far fa-edit"></i></button>'
+                                var button_delete_tarea = '<button class="button-delete-tarea" type="submit" name="delete_tarea" value="' + tarea_id + '"><i class="fas fa-trash-alt"></i></button><br/><br/>'
+                                if (status == "false") {
+                                    var class_box = '<div class="bg-danger tarea-incompleted border border-dark rounded border-5">';
+                                    var button_status_tarea = '<button type="submit" class="button-status-tarea" style="background-color:red;" name="change_estado_tarea" value="' + tarea_id + '"><i class="fas fa-times-circle"></i></button>'
+                                }
+                                else {
+                                    var class_box = '<div class="bg-success tarea-completed border border-dark rounded border-5">';
+                                    var button_status_tarea = '<button type="submit" class="button-status-tarea" style="background-color:green;" name="change_estado_tarea" value="' + tarea_id + '"><i class="fas fa-check-circle"></i></button>'
+
+                                }
+                                var content = ''
+                                content += '<div class="col-lg-4 p-1">';
+                                content += class_box;
+                                content += button_status_tarea;
+                                content += button_edit_tarea;
+                                content += button_delete_tarea;
+                                content += '<div class="text-name-tarea">' + tarea.nombre + '</div><br/>';
+                                content += '<div class="text-description-tarea">' + tarea.descripcion + '</div>';
+                                content += '<div class="text-date-created-tarea"><b>Creado:</b> ' + tarea.created + '</div>';
+                                content += '<div class="text-date-updated-tarea"><b>Actualizado:</b> ' + tarea.updated + '</div>';
+                                content += '</div>';
+                                content += ''
+                                content += '</div>';
+                                document.getElementById(div_tareas).innerHTML += content;
+                            }
+                            $('#loader').hide();
+                        }
+                    })
+            });
+        }
+    );
+</script>
+
+{% endblock %}
